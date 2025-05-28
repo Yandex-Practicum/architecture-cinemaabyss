@@ -31,15 +31,18 @@ public class EventProducer<T extends BaseEvent> {
         try {
             String json = objectMapper.writeValueAsString(event);
             ProducerRecord<String, String> record = new ProducerRecord<>(topic, event.getId(), json);
-
-            producer.send(record, (metadata, exception) -> {
-                if (exception == null) {
-                    logger.info("Отправлено событие: topic={}, partition={}, offset={}",
-                            metadata.topic(), metadata.partition(), metadata.offset());
-                } else {
-                    logger.error("Ошибка отправки события: {}", exception.getMessage(), exception);
-                }
-            });
+            producer.send(
+                    record, (metadata, exception) -> {
+                        if (exception == null) {
+                            logger.info(
+                                    "Отправлено событие: topic={}, partition={}, offset={}",
+                                    metadata.topic(), metadata.partition(), metadata.offset()
+                            );
+                        } else {
+                            logger.error("Ошибка отправки события: {}", exception.getMessage(), exception);
+                        }
+                    }
+            );
         } catch (Exception e) {
             logger.error("Ошибка сериализации события: {}", e.getMessage(), e);
         }

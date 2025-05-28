@@ -38,8 +38,8 @@ public abstract class BaseEvent {
         this.type = type;
     }
 
-    public Instant getTimestamp() {
-        return timestamp;
+    public Long getTimestamp() {
+        return timestamp.toEpochMilli();
     }
 
     public void setTimestamp(Instant timestamp) {
